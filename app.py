@@ -7,7 +7,6 @@ load_dotenv()
 import pandas as pd
 import cv2
 import pickle
-import dlib
 import face_recognition
 import numpy as np
 import EncodeGenerator
