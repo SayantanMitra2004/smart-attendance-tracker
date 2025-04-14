@@ -45,3 +45,32 @@ def encodeGenerator():
     pickle.dump(encodeListKnownWithIds, file)
     file.close()
     print("File saved...")
+
+
+def removeEncoding(student_id):
+    file_path = "Encodefile.p"
+
+    if not os.path.exists(file_path):
+        print("Encoded file not found!")
+        return False
+
+    with open(file_path, 'rb') as file:
+        encodeListKnownWithIds = pickle.load(file)
+
+    encodeListKnown, studentIds = encodeListKnownWithIds
+
+    if student_id in studentIds:
+        index = studentIds.index(student_id)
+        del studentIds[index]
+        del encodeListKnown[index]
+
+        # Save the updated encoding file
+        with open(file_path, 'wb') as file:
+            pickle.dump([encodeListKnown, studentIds], file)
+
+        print(f"Successfully removed {student_id} from encoded file.")
+        return True
+
+    else:
+        print(f"Student ID {student_id} not found in encoded file.")
+        return False

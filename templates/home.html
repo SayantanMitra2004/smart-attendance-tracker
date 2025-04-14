@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Important for mobile responsiveness -->
+    <title>User Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            border-radius: 16px;
+            background-color: #ffffff;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 600;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: #f0f9ff;
+            transform: scale(1.02);
+            border-color: #3b82f6;
+        }
+
+        .btn img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        @media (min-width: 640px) {
+            .button-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .btn {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 16px;
+                font-size: 1rem;
+            }
+
+            .btn img {
+                width: 40px;
+                height: 40px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>User Panel</h1>
+        <div class="button-grid">
+            <a href="teacher_login" class="btn">
+                <img src="https://r2.erweima.ai/imgcompressed/img/compressed_54a735ce5ecad95a7e9f4036dd98ea81.webp" alt="Teacher Icon">
+                Teacher's Portal
+            </a>
+            <a href="signup" class="btn">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMFisr7nbvh-BtvWKncYX29Nhp8Q-ieuRLjA&s" alt="Student Icon">
+                Student's Portal
+            </a>
+            <a href="index" class="btn">
+                <img src="https://cdn-icons-png.freepik.com/512/9255/9255033.png" alt="Security Icon">
+                Take Attendance
+            </a>
+            <a href="admin_login" class="btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/3899/3899613.png" alt="Author Icon">
+                Admin's Portal
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
+

@@ -1,75 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Video Stream</title>
+    <title>Face Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile responsiveness -->
     <style>
-        body, html {
+        body,
+        html {
             height: 100%;
             margin: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             text-align: center;
+            max-width: 90%;
+            width: 500px;
         }
 
-        h1, h2, p {
+        h1 {
+            font-size: 2rem;
             color: #4a4a4a;
+            margin-bottom: 20px;
         }
 
         #video {
+            display: block;
             width: 100%;
-            max-width: 640px;
+            height: auto;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #stop-camera-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        #stop-camera-btn:hover {
+            background-color: #c82333;
+        }
+
+        #start-camera-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #28a745;
+            /* Bootstrap green */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-right: 10px;
+        }
+
+        #start-camera-btn:hover {
+            background-color: #218838;
+        }
+
+
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            color: #3b82f6;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #start-camera-btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            #stop-camera-btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .back-link {
+                font-size: 1rem;
+            }
         }
     </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container">
-        <h1>Face Attendance Video Stream</h1>
-        <p>PLease Wait while we verify your face!</p>
+        <h1>Face Attendance System</h1>
         <img id="video" src="{{ url_for('video') }}" alt="Video Stream">
+        <button id="stop-camera-btn">Stop Camera</button>
+        <button id="start-camera-btn">Start Camera</button>
+
     </div>
-    
+    <a href="/" class="back-link">Back To Dashboard</a>
+
     <script>
         let startTime = Date.now();
-        let minWaitTime = 10000; // 10 seconds in milliseconds
-        let maxWaitTime = 20000; // 20 seconds in milliseconds
+        let minWaitTime = 3000;
+        let maxWaitTime = 20000;
+        let cameraStopped = false;
 
         function checkFace() {
+            if (cameraStopped) return;
+
             fetch('/check_face')
                 .then(response => response.json())
                 .then(data => {
                     let currentTime = Date.now();
+
                     if (data.recognized) {
                         if (currentTime - startTime >= minWaitTime) {
-                            fetch('/stop_camera')
-                                .then(() => {
-                                    window.location.href = '/classes';
-                                });
+                            const userId = data.user_id || "N/A";
+                            const message = data.message || "Status unknown";
+
+                            switch (data.status) {
+                                case 'duplicate':
+                                    alert(`⚠️ Duplicate Entry!\n${message}\nUser ID: ${userId}`);
+                                    break;
+                                case 'success':
+                                    alert(`✅ Attendance Granted!\n${message}\nUser ID: ${userId}`);
+                                    break;
+                                case 'not_found':
+                                    alert(`❌ User Not Found in Database.\n${message}`);
+                                    break;
+                                default:
+                                    alert(`ℹ️ Unknown Response: ${message}`);
+                                    break;
+                            }
                         } else {
                             setTimeout(checkFace, 1000);
                         }
                     } else if (currentTime - startTime >= maxWaitTime) {
-                        alert("Your face is not recognized. You might not have registered with the course.");
-                        fetch('/stop_camera');
+                        alert("⏱️ Face not recognized. Please register.");
                     } else {
-                        setTimeout(checkFace, 1000); 
+                        setTimeout(checkFace, 1000);
                     }
+                })
+                .catch(err => {
+                    console.error("Error fetching face check:", err);
+                    alert("⚠️ Error checking face recognition. Please try again.");
                 });
         }
 
-        
+        document.getElementById("stop-camera-btn").addEventListener("click", () => {
+            fetch('/stop_camera')
+                .then(() => {
+                    cameraStopped = true;
+                    alert("📷 Camera stopped successfully.");
+                })
+                .catch(err => {
+                    console.error("Error stopping camera:", err);
+                    alert("⚠️ Error stopping camera.");
+                });
+        });
+
+        document.getElementById("start-camera-btn").addEventListener("click", () => {
+            fetch('/start_camera')
+                .then(response => response.json())
+                .then(data => {
+                    alert(`📷 ${data.status}`);
+                })
+                .catch(err => {
+                    console.error("Error starting camera:", err);
+                    alert("⚠️ Error starting camera.");
+                });
+        });
+
         setTimeout(checkFace, minWaitTime);
     </script>
 </body>
-</html>
 
+</html>

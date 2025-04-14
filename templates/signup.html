@@ -1,83 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <script>
-        function generateRandomUserId() {
-            // Generate a random number between 100000 and 999999
-            var randomUserId = Math.floor(Math.random() * 900000) + 100000;
-            // Set the content of the h2 tag with the unique user ID
-            document.getElementById("unique_user_id").innerText = "Your Unique ID: " + randomUserId;
-            // Set the hidden input value with the unique user ID
-            document.getElementById("user_id").value = randomUserId;
-            // Save the unique user ID to local storage
-            localStorage.setItem('user_id', randomUserId);
-            // Console log the unique user ID
-            console.log("Generated Unique ID: " + randomUserId);
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Get user ID and username from the form
-            const userId = document.getElementById("user_id").value;
-            const userName = document.querySelector('input[name="user_name"]').value;
-
-            // Open the new tab with the URL
-            const downloadUrl = `/download/${userId}/${userName}`;
-            window.open(downloadUrl, '_blank');
-
-            // Submit the form
-            document.getElementById("uploadForm").submit();
-        }
-
-        // Call the function to generate the random user ID when the page loads
-        window.onload = generateRandomUserId;
-    </script>
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body, html {
-            height: 100%;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
             margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: #f8f9fa;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h1, h2, p {
-            color: #4a4a4a;
+        h1 {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .flash {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .flash.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .flash.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.07);
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 15px 30px;
+            background-color: #3b82f6;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2563eb;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design for small screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            input[type="submit"] {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .form-container {
+                padding: 15px;
+            }
+
+            input[type="submit"] {
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Sign in to join with Us</h1>
-        <img src="https://t4.ftcdn.net/jpg/05/58/06/81/360_F_558068185_sZmfyrWuzHTfzLdwJuj1ALQcBtbKAtbA.jpg" alt="signup image">
-        <h2 id="unique_user_id">Your Unique ID: (unique_user_id)</h2>
-        <p>Make sure you note this ID. It is required while login</p>
-        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
-            <input type="hidden" id="user_id" name="user_id">
-            <div class="mb-3">
-                <input type="text" class="form-control" name="user_name" placeholder="Enter Your Username" required>
+        <h1> Student Sign Up</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div>
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
             </div>
-            <div class="mb-3">
-                <input type="file" class="form-control" name="image" accept="image/*" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </form>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="user_name">Name</label>
+                    <input type="text" id="user_name" name="user_name" placeholder="Enter student name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user_id">Registration Number</label>
+                    <input type="text" id="user_id" name="user_id" placeholder="Enter Registration Number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <option value="CST">CST</option>
+                        <option value="mechanical">ME</option>
+                        <option value="ETC">ETC</option>
+                        <option value="EC">EE</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="semester">Semester</label>
+                    <select id="semester" name="semester" required>
+                        <option value="1 semester">1 Semester</option>
+                        <option value="2 semester">2 Semester</option>
+                        <option value="3 semester">3 Semester</option>
+                        <option value="4 semester">4 Semester</option>
+                        <option value="5 semester">5 Semester</option>
+                        <option value="6 semester">6 Semester</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Upload Image</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                    <a href="/" class = "back-link">Back To Dashboard</a>
+                </div>
+
+                <input type="submit" value="Upload">
+            </form>
+        </div>
     </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            document.getElementById("uploadForm").submit();
+        }
+    </script>
 </body>
+
 </html>

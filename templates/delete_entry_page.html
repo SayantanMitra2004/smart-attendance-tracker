@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Student Entry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .delete-container {
+            background-color: #fff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h3 {
+            color: #1e3a8a;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #dc2626;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            h3 {
+                font-size: 1.4rem;
+            }
+
+            .delete-container {
+                padding: 25px 15px;
+            }
+
+            .back-link {
+                font-size: 0.95rem;
+            }
+
+            .message {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Delete Entry Section -->
+    <div class="delete-container">
+        <h3>Delete Student Entry</h3>
+        <input type="text" id="student_id" placeholder="Enter Student ID">
+        <button onclick="deleteEntry()">Delete</button>
+        <a href="/admin" class="back-link">Back to Dashboard</a>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        function deleteEntry() {
+            const studentId = document.getElementById("student_id").value.trim();
+            const messageDiv = document.getElementById("message");
+
+            if (!studentId) {
+                messageDiv.innerHTML = "Please enter a Student ID.";
+                messageDiv.style.color = "red";
+                return;
+            }
+
+            fetch(`/delete_entry/${studentId}`, {
+                method: "POST"
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    messageDiv.innerHTML = data.message;
+                    messageDiv.style.color = "green";
+                } else {
+                    messageDiv.innerHTML = data.error || "Error deleting student.";
+                    messageDiv.style.color = "red";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                messageDiv.innerHTML = "Error deleting entry.";
+                messageDiv.style.color = "red";
+            });
+        }
+    </script>
+
+</body>
+</html>

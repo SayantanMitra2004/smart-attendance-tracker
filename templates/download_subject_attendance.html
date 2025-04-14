@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Download Subject Attendance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .back-link {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4 py-8 sm:py-10">
+
+    <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 w-full max-w-md sm:max-w-lg">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">📥 Download Attendance</h1>
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashes mb-4">
+            {% for category, message in messages %}
+            <li class="{{ category }} text-center text-sm text-red-500">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('download_subject_attendance') }}" method="POST" class="space-y-4 sm:space-y-6">
+            <!-- Subject Input -->
+            <div>
+                <label for="subject_name" class="block text-sm font-semibold text-gray-700">Subject Name</label>
+                <input type="text" name="subject_name" id="subject_name" required
+                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+            </div>
+
+            <!-- Start Date -->
+            <div>
+                <label for="start_date" class="block text-sm font-semibold text-gray-700">Start Date</label>
+                <input type="date" name="start_date" id="start_date" required
+                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+            </div>
+
+            <!-- End Date -->
+            <div>
+                <label for="end_date" class="block text-sm font-semibold text-gray-700">End Date</label>
+                <input type="date" name="end_date" id="end_date" required
+                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 w-full sm:w-auto">
+                    Download Excel
+                </button>
+            </div>
+        </form>
+
+        <!-- Back Button -->
+        <div class="mt-6 text-center">
+            <a href="{{ url_for('view_attendance') }}" class="back-link block sm:inline">&larr; Back to Attendance Page</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
