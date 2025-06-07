@@ -112,12 +112,12 @@
             <div class="col-12 col-md-4">
                 <select name="semester" class="form-select" required>
                     <option value="" disabled selected>Select Semester</option>
-                    <option value="1 semester">Semester 1</option>
-                    <option value="2 semester">Semester 2</option>
-                    <option value="3 semester">Semester 3</option>
-                    <option value="4 semester">Semester 4</option>
-                    <option value="5 semester">Semester 5</option>
-                    <option value="6 semester">Semester 6</option>
+                    <option value="1semester">Semester 1</option>
+                    <option value="2semester">Semester 2</option>
+                    <option value="3semester">Semester 3</option>
+                    <option value="4semester">Semester 4</option>
+                    <option value="5semester">Semester 5</option>
+                    <option value="6semester">Semester 6</option>
                 </select>
             </div>
             <div class="col-12 col-md-4">
@@ -157,6 +157,8 @@
         <form action="/submit_attendance" method="post" id="attendanceForm" onsubmit="submitAttendance(event)">
             <input type="hidden" name="subject_name" value="{{ subject_name }}">
             <input type="hidden" name="date_column" value="{{ date }}">
+            <input type="hidden" name="department" value="{{ department }}">
+            <input type="hidden" name="semester" value="{{ semester }}">
 
             <div class="table-responsive">
                 <table class="table table-bordered" id="attendanceTable">
@@ -201,69 +203,71 @@
     </div>
 
     <script>
-        // Filter logic
-        document.getElementById("departmentFilter").addEventListener("input", filterTable);
-        document.getElementById("attendanceStatusFilter").addEventListener("change", filterTable);
+    // Filter logic for department and attendance status
+    document.getElementById("departmentFilter")?.addEventListener("input", filterTable);
+    document.getElementById("attendanceStatusFilter")?.addEventListener("change", filterTable);
 
-        function filterTable() {
-            const deptVal = document.getElementById("departmentFilter").value.toLowerCase().trim();
-            const attendanceVal = document.getElementById("attendanceStatusFilter").value;
+    function filterTable() {
+        const deptFilterElem = document.getElementById("departmentFilter");
+        const deptVal = deptFilterElem ? deptFilterElem.value.toLowerCase().trim() : "";
+        const attendanceVal = document.getElementById("attendanceStatusFilter")?.value || "";
 
-            const rows = document.querySelectorAll("#attendanceTable tbody tr");
+        const rows = document.querySelectorAll("#attendanceTable tbody tr");
 
-            rows.forEach(row => {
-                const deptCell = row.querySelector(".department")?.textContent.toLowerCase().trim() || "";
-                const attendanceCell = row.querySelector(".present-status")?.textContent.trim();
-                const isPresent = attendanceCell.includes("✅");
+        rows.forEach(row => {
+            const deptCell = row.querySelector(".department")?.textContent.toLowerCase().trim() || "";
+            const attendanceCell = row.querySelector(".date")?.textContent.trim() || ""; // Using '.date' to match your attendance column in the HTML
+            const isPresent = attendanceCell.includes("✅");
 
-                const show =
-                    (!deptVal || deptCell.includes(deptVal)) &&
-                    (!attendanceVal || (attendanceVal === "1" && isPresent));
+            const show =
+                (!deptVal || deptCell.includes(deptVal)) &&
+                (!attendanceVal || (attendanceVal === "1" && isPresent));
 
-                row.style.display = show ? "" : "none";
-            });
-        }
-
-        // Select All checkbox
-        document.getElementById("selectAll").addEventListener("change", function () {
-            const checkboxes = document.querySelectorAll("input[name='selected_ids']");
-            checkboxes.forEach(cb => cb.checked = this.checked);
+            row.style.display = show ? "" : "none";
         });
-        // Attendance submission logic with alert
-        function submitAttendance(event) {
-            event.preventDefault(); // Prevent form from submitting immediately
+    }
 
-            const selectedCheckboxes = document.querySelectorAll("input[name='selected_ids']:checked");
+    // Select All checkbox toggles individual checkboxes
+    document.getElementById("selectAll")?.addEventListener("change", function () {
+        const checkboxes = document.querySelectorAll("input[name='selected_ids']");
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
 
-            const alertContainer = document.createElement('div');
-            alertContainer.classList.add('alert');
+    // Attendance submission with alert
+    function submitAttendance(event) {
+        event.preventDefault(); // Prevent form from submitting immediately
 
-            if (selectedCheckboxes.length >= 0) {
-                // Show success alert
-                alertContainer.classList.add('alert-success');
-                alertContainer.innerHTML = 'Attendance submitted successfully!';
-            } else {
-                // Show error alert
-                alertContainer.classList.add('alert-error');
-                alertContainer.innerHTML = 'Please select at least one student!';
-            }
+        const selectedCheckboxes = document.querySelectorAll("input[name='selected_ids']:checked");
 
-            // Append the alert to the body or a specific section
+        // Remove any existing alert first
+        const existingAlert = document.querySelector('.alert');
+        if (existingAlert) existingAlert.remove();
+
+        const alertContainer = document.createElement('div');
+        alertContainer.classList.add('alert');
+
+        if (selectedCheckboxes.length > 0) {
+            alertContainer.classList.add('alert-success');
+            alertContainer.textContent = 'Attendance submitted successfully!';
+        } else {
+            alertContainer.classList.add('alert-error');
+            alertContainer.textContent = 'Please select at least one student!';
             document.body.prepend(alertContainer);
-
-            // Set a timeout to remove the alert after 10 seconds
-            setTimeout(() => {
-                alertContainer.remove();
-
-                // If success, submit the form after the alert disappears
-                if (selectedCheckboxes.length > 0) {
-                    document.getElementById("attendanceForm").submit(); // Submit the form after showing the alert
-                }
-            }, 3000);
+            // Auto-remove alert after 3 seconds and do not submit
+            setTimeout(() => alertContainer.remove(), 3000);
+            return; // Stop here, no form submission
         }
 
+        document.body.prepend(alertContainer);
 
-    </script>
+        // Remove alert after 3 seconds and submit form
+        setTimeout(() => {
+            alertContainer.remove();
+            document.getElementById("attendanceForm").submit();
+        }, 3000);
+    }
+</script>
+
 </body>
 
 </html>

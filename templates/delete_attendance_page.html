@@ -1,146 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Subject Attendance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e3f2fd, #fff);
-            margin: 0;
-            padding: 20px;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delete Subject Attendance</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #fff);
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .delete-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
+    .delete-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
 
-        h3 {
-            color: #1e3a8a;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
+    h3 {
+      color: #1e3a8a;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
 
-        input[type="text"] {
-            padding: 12px;
-            font-size: 1rem;
-            width: 100%;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
+    input[type="text"],
+    select.form-select {
+      padding: 12px;
+      font-size: 1rem;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
 
-        button {
-            padding: 12px 24px;
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
+    button {
+      padding: 12px 24px;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
 
-        button:hover {
-            background-color: #dc2626;
-        }
+    button:hover {
+      background-color: #dc2626;
+    }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #3b82f6;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #3b82f6;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+    .back-link:hover {
+      text-decoration: underline;
+    }
 
-        .message {
-            margin-top: 15px;
-            font-size: 1rem;
-            font-weight: 600;
-        }
+    .message {
+      margin-top: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 1.2em;
+    }
 
-        @media (max-width: 480px) {
-            .delete-container {
-                padding: 25px;
-                border-radius: 15px;
-            }
+    @media (max-width: 480px) {
+      .delete-container {
+        padding: 25px;
+        border-radius: 15px;
+      }
 
-            h3 {
-                font-size: 1.5rem;
-            }
+      h3 {
+        font-size: 1.5rem;
+      }
 
-            input[type="text"], button {
-                font-size: 0.95rem;
-                padding: 10px;
-            }
+      input[type="text"],
+      select.form-select,
+      button {
+        font-size: 0.95rem;
+        padding: 10px;
+      }
 
-            .back-link {
-                font-size: 1rem;
-            }
-        }
-    </style>
+      .back-link {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="delete-container">
+    <h3>Delete Subject Attendance</h3>
+    <input type="text" id="subject_name" placeholder="Enter Subject Name" />
 
-    <div class="delete-container">
-        <h3>Delete Subject Attendance</h3>
-        <input type="text" id="subject_name" placeholder="Enter Subject Name">
-        <button onclick="deleteSubjectAttendance()">Delete</button>
-        <a href="/admin" class="back-link">Back to Dashboard</a>
-        <div id="message" class="message"></div>
-    </div>
+    <select id="semester" name="semester" class="form-select" required>
+      <option value="" disabled selected>Select Semester</option>
+      <option value="1semester">Semester 1</option>
+      <option value="2semester">Semester 2</option>
+      <option value="3semester">Semester 3</option>
+      <option value="4semester">Semester 4</option>
+      <option value="5semester">Semester 5</option>
+      <option value="6semester">Semester 6</option>
+    </select>
 
-    <script>
-        function deleteSubjectAttendance() {
-            const subjectName = document.getElementById("subject_name").value.trim();
-            const messageDiv = document.getElementById("message");
+    <select id="department" name="department" class="form-select" required>
+      <option value="" disabled selected>Select Department</option>
+      <option value="CST">Computer Science</option>
+      <option value="ETC">Electronics</option>
+      <option value="EEE">Electrical</option>
+      <option value="ME">Mechanical</option>
+      <option value="CE">Civil</option>
+    </select>
 
-            if (!subjectName) {
-                messageDiv.innerHTML = "Please enter a Subject Name.";
-                messageDiv.style.color = "red";
-                return;
-            }
+    <button onclick="deleteSubjectAttendance()">Delete</button>
+    <a href="/admin" class="back-link">Back to Dashboard</a>
+    <div id="message" class="message"></div>
+  </div>
 
-            fetch(`/delete_subject_attendance/${subjectName}`, {
-                method: "POST"
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    messageDiv.innerHTML = data.message;
-                    messageDiv.style.color = "green";
-                } else {
-                    messageDiv.innerHTML = data.error || "Error deleting attendance data.";
-                    messageDiv.style.color = "red";
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                messageDiv.innerHTML = "Error deleting data.";
-                messageDiv.style.color = "red";
-            });
-        }
-    </script>
+  <script>
+    function deleteSubjectAttendance() {
+      const subjectName = document.getElementById("subject_name").value.trim();
+      const semester = document.getElementById("semester").value;
+      const department = document.getElementById("department").value;
+      const messageDiv = document.getElementById("message");
 
+      // Clear previous message
+      messageDiv.textContent = "";
+      messageDiv.style.color = "";
+
+      if (!subjectName) {
+        messageDiv.textContent = "Please enter a Subject Name.";
+        messageDiv.style.color = "red";
+        return;
+      }
+      if (!semester) {
+        messageDiv.textContent = "Please select a Semester.";
+        messageDiv.style.color = "red";
+        return;
+      }
+      if (!department) {
+        messageDiv.textContent = "Please select a Department.";
+        messageDiv.style.color = "red";
+        return;
+      }
+
+      fetch(`/delete_subject_attendance/${encodeURIComponent(subjectName)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ semester, department }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message) {
+            messageDiv.textContent = data.message;
+            messageDiv.style.color = "green";
+          } else {
+            messageDiv.textContent = data.error || "Error deleting attendance data.";
+            messageDiv.style.color = "red";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          messageDiv.textContent = "Error deleting data.";
+          messageDiv.style.color = "red";
+        });
+    }
+  </script>
 </body>
 </html>

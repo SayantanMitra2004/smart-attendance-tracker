@@ -511,7 +511,7 @@ def view_attendance():
         print(rows)
         conn.close()
 
-        return render_template('attendance.html', rows=rows, subject_name=subject_name, date=date_column)
+        return render_template('attendance.html', rows=rows, subject_name=subject_name, date=date_column, department=department, semester=semester)
 
     return render_template('attendance.html')
 
@@ -519,31 +519,50 @@ def view_attendance():
 @app.route('/delete_subject_attendance/<subject_name>', methods=['POST'])
 def delete_subject_attendance(subject_name):
     try:
-        # Sanitize subject name to prevent SQL injection 
+        # Sanitize subject_name
         subject_name = subject_name.strip()
 
         if not subject_name:
             return jsonify({'error': 'Subject name cannot be empty.'}), 400
 
+        data = request.get_json()
+        semester = data.get('semester', '').strip()
+        department = data.get('department', '').strip()
+
+        if not semester:
+            return jsonify({'error': 'Semester is required.'}), 400
+        if not department:
+            return jsonify({'error': 'Department is required.'}), 400
+
+        # You can customize your table naming or filtering logic based on semester and department here
+        # Example: You might want to include semester and department in your table name or your deletion criteria
+
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
-        table_name = f'attendance_{subject_name}'
+
+        # For example, table naming includes subject name only (modify if needed)
+        table_name = f'attendance_{subject_name}_{semester}_{department}'
+
         # Check if the subject table exists
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
         if not cursor.fetchone():
             conn.close()
             return jsonify({'error': f"Subject '{subject_name}' does not exist."}), 404
 
-        # Drop the subject table
+        # Example: If you want to delete attendance only for given semester and department inside the table,
+        # you would do a DELETE query here instead of dropping the whole table.
+        # But since your code drops the whole table, I keep it as is.
+
         cursor.execute(f"DROP TABLE IF EXISTS '{table_name}'")
         conn.commit()
         conn.close()
 
-        return jsonify({'message': f"Subject '{subject_name}' attendance data deleted successfully."})
+        return jsonify({'message': f"Subject '{subject_name}' attendance data deleted successfully for semester '{semester}' and department '{department}'."})
 
     except Exception as e:
         print("Error:", e)
         return jsonify({'error': 'An error occurred while deleting the subject attendance.'}), 500
+
 
 
 @app.route('/delete_entry/<student_id>', methods=['POST'])
@@ -596,18 +615,21 @@ def submit_attendance():
     selected_ids = request.form.getlist('selected_ids')
     subject_name = request.form.get('subject_name').strip()
     date_column = request.form.get('date_column').strip()
-
+    department = request.form.get('department')
+    semester = request.form.get('semester')
+    print(semester)
+    print(department)
     if not subject_name or not date_column:
         return "Missing subject name or date column", 400
 
-    subject_table_name = f'attendance_{subject_name}'
+    subject_table_name = f'attendance_{subject_name}_{semester}_{department}'
 
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    print("Selected IDs:", selected_ids)
+    # print("Selected IDs:", selected_ids)
     print("Subject Table:", subject_table_name)
-    print("Date Column:", date_column)
+    # print("Date Column:", date_column)
 
     try:
         # Mark everyone absent
