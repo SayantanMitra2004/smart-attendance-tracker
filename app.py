@@ -374,6 +374,7 @@ def check_face():
         # Check if user exists
         cursor.execute("SELECT user_name, department, semester FROM users WHERE user_id = ?", (recognized_user_id,))
         result = cursor.fetchone()
+        print(recognized_user_id)
 
         if not result:
             conn.close()
