@@ -452,7 +452,9 @@ def view_attendance():
         subject_name = request.form['subject_name'].strip().replace(" ", "_").lower()
         date_column = request.form['date_column'].strip()
         semester = request.form['semester'].strip()
-        table_name = f'attendance_{subject_name}'
+        department = request.form['department'].strip()
+        print(department)
+        table_name = f'attendance_{subject_name}_{semester}_{department}'
 
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
@@ -478,8 +480,8 @@ def view_attendance():
             new_column_added = True
 
 
-        # 3. Fetch users for the given semester
-        cursor.execute("SELECT user_id FROM users WHERE semester = ?", (semester,))
+        # 3. Fetch users for the given semester and
+        cursor.execute("SELECT user_id FROM users WHERE semester = ? and department = ?", (semester, department))
         user_ids = cursor.fetchall()
 
         
@@ -503,8 +505,8 @@ def view_attendance():
             FROM users
             LEFT JOIN attendance ON users.user_id = attendance.user_id
             LEFT JOIN "{table_name}" ON users.user_id = "{table_name}".user_id 
-            WHERE users.semester = ?
-        ''', (semester,))
+            WHERE users.semester = ? and users.department = ?
+        ''', (semester,department))
         rows = cursor.fetchall()
         print(rows)
         conn.close()
@@ -637,6 +639,8 @@ from datetime import datetime
 def download_subject_attendance():
     if request.method == 'POST':
         subject_name = request.form.get('subject_name')
+        semester = request.form.get('semester')
+        department = request.form.get('department')
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
 
@@ -649,7 +653,7 @@ def download_subject_attendance():
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
 
-        subject_table_name = f"attendance_{subject_name}"
+        subject_table_name = f"attendance_{subject_name}_{semester}_{department}"
 
         try:
             # Get all column names from the subject table

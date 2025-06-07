@@ -120,6 +120,16 @@
                     <option value="6 semester">Semester 6</option>
                 </select>
             </div>
+            <div class="col-12 col-md-4">
+                <select name="department" class="form-select" required>
+                    <option value="" disabled selected>Select Department</option>
+                    <option value="CST">Computer Science</option>
+                    <option value="ETC">Electronics</option>
+                    <option value="EEE">Electrical</option>
+                    <option value="ME">Mechanical</option>
+                    <option value="CE">Civil</option>
+                </select>
+            </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary w-100" style="padding: 6px 10px;">
                     Load Subject Attendance
@@ -130,9 +140,7 @@
 
         <!-- Filters -->
         <div class="row g-3 mb-3">
-            <div class="col-12 col-md-6">
-                <input type="text" id="departmentFilter" class="form-control" placeholder="Filter by Department">
-            </div>
+        
             <div class="col-12 col-md-6">
                 <select id="attendanceStatusFilter" class="form-select">
                     <option value="">All Students</option>
@@ -172,7 +180,8 @@
                             <td>{{ row[1] }}</td>
                             <td class="department">{{ row[2] }}</td>
                             <td>{{ row[3] }}</td>
-                            <td class="present-status">{% if row[4] == 1 %}✅{% elif row[4] == 0 %}❌{% else %}N/A{% endif %}</td>
+                            <td class="present-status">{% if row[4] == 1 %}✅{% elif row[4] == 0 %}❌{% else %}N/A{% endif
+                                %}</td>
                             <td>{{ row[5] }}</td>
                             <td class="date">
                                 {% if row[6] == 1 %}✅

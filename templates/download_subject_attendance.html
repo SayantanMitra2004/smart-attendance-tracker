@@ -37,53 +37,84 @@
 <body class="bg-gray-100 min-h-screen flex items-center justify-center px-4 py-8 sm:py-10">
 
     <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 w-full max-w-md sm:max-w-lg">
-        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">📥 Download Attendance</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+            📥 Download Attendance
+        </h1>
 
         <!-- Display Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <ul class="flashes mb-4">
+        <ul class="mb-4">
             {% for category, message in messages %}
-            <li class="{{ category }} text-center text-sm text-red-500">{{ message }}</li>
+            <li class="text-center text-sm text-red-500 font-medium">{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
         {% endwith %}
 
-        <form action="{{ url_for('download_subject_attendance') }}" method="POST" class="space-y-4 sm:space-y-6">
+        <form action="{{ url_for('download_subject_attendance') }}" method="POST" class="space-y-5">
             <!-- Subject Input -->
             <div>
-                <label for="subject_name" class="block text-sm font-semibold text-gray-700">Subject Name</label>
+                <label for="subject_name" class="block text-sm font-semibold text-gray-700 mb-1">Subject Name</label>
                 <input type="text" name="subject_name" id="subject_name" required
-                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+            </div>
+
+            <!-- Semester Dropdown -->
+            <div>
+                <label for="semester" class="block text-sm font-semibold text-gray-700 mb-1">Semester</label>
+                <select name="semester" id="semester" required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                    <option value="" disabled selected>Select Semester</option>
+                    <option value="1 semester">Semester 1</option>
+                    <option value="2 semester">Semester 2</option>
+                    <option value="3 semester">Semester 3</option>
+                    <option value="4 semester">Semester 4</option>
+                    <option value="5 semester">Semester 5</option>
+                    <option value="6 semester">Semester 6</option>
+                </select>
+            </div>
+
+            <!-- Department Dropdown -->
+            <div>
+                <label for="department" class="block text-sm font-semibold text-gray-700 mb-1">Department</label>
+                <select name="department" id="department" required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                    <option value="" disabled selected>Select Department</option>
+                    <option value="CST">Computer Science</option>
+                    <option value="ETC">Electronics</option>
+                    <option value="EEE">Electrical</option>
+                    <option value="ME">Mechanical</option>
+                    <option value="CE">Civil</option>
+                </select>
             </div>
 
             <!-- Start Date -->
             <div>
-                <label for="start_date" class="block text-sm font-semibold text-gray-700">Start Date</label>
+                <label for="start_date" class="block text-sm font-semibold text-gray-700 mb-1">Start Date</label>
                 <input type="date" name="start_date" id="start_date" required
-                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
             </div>
 
             <!-- End Date -->
             <div>
-                <label for="end_date" class="block text-sm font-semibold text-gray-700">End Date</label>
+                <label for="end_date" class="block text-sm font-semibold text-gray-700 mb-1">End Date</label>
                 <input type="date" name="end_date" id="end_date" required
-                    class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
             </div>
 
             <!-- Submit Button -->
             <div class="text-center">
                 <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 w-full sm:w-auto">
-                    Download Excel
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-200">
+                    Download
                 </button>
             </div>
         </form>
 
-        <!-- Back Button -->
-        <div class="mt-6 text-center">
-            <a href="{{ url_for('view_attendance') }}" class="back-link block sm:inline">&larr; Back to Attendance Page</a>
+        <!-- Back Link -->
+        <div class="text-center mt-6">
+            <a href="/" class="back-link">← Back to Home</a>
         </div>
     </div>
 
