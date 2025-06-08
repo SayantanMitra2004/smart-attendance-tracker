@@ -216,7 +216,7 @@
 
         rows.forEach(row => {
             const deptCell = row.querySelector(".department")?.textContent.toLowerCase().trim() || "";
-            const attendanceCell = row.querySelector(".date")?.textContent.trim() || ""; // Using '.date' to match your attendance column in the HTML
+            const attendanceCell = row.querySelector(".present-status")?.textContent.trim() || ""; // Using '.date' to match your attendance column in the HTML
             const isPresent = attendanceCell.includes("✅");
 
             const show =

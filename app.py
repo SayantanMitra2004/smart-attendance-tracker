@@ -453,7 +453,6 @@ def view_attendance():
         date_column = request.form['date_column'].strip()
         semester = request.form['semester'].strip()
         department = request.form['department'].strip()
-        print(department)
         table_name = f'attendance_{subject_name}_{semester}_{department}'
 
         conn = sqlite3.connect(DATABASE)
@@ -480,7 +479,7 @@ def view_attendance():
             new_column_added = True
 
 
-        # 3. Fetch users for the given semester and
+        # 3. Fetch users for the given semester and department
         cursor.execute("SELECT user_id FROM users WHERE semester = ? and department = ?", (semester, department))
         user_ids = cursor.fetchall()
 
@@ -668,8 +667,8 @@ def download_subject_attendance():
 
         
 
-        if not subject_name or not start_date or not end_date:
-            return "Subject, Start and End dates are required", 400
+        if not subject_name or not start_date or not end_date or not department or not semester:
+            return "Subject, Department, Semester, Start and End dates are required", 400
 
 
         conn = sqlite3.connect(DATABASE)
@@ -736,6 +735,7 @@ def download_subject_attendance():
                         cell.fill = red_fill
 
             wb.save(output_path)
+            
             conn.close()
             response =  send_file(output_path, as_attachment=True)
 
