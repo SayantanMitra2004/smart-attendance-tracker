@@ -712,8 +712,8 @@ def download_subject_attendance():
 
 
             # Output Excel file
-            output_filename = f'{subject_name}_attendance_{start_date}_to_{end_date}.xlsx'
-            output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+            output_filename = f'{subject_name}_attendance_{start_date}_to_{end_date}.xlsx' #excel file name
+            output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename) #excel file path 
             df.to_excel(output_path, index=False)
 
             # Open workbook to apply fill color
